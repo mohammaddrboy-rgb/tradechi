@@ -1,0 +1,443 @@
+{
+  "major": 2,
+  "minor": 55,
+  "patch": 0,
+  "label": "v2.55",
+  "released": "2026-07-10",
+  "history": [
+    {
+      "version": "2.55.0",
+      "label": "v2.55",
+      "date": "2026-07-10",
+      "title": "Automated dashboard update",
+      "level": "minor"
+    },
+    {
+      "version": "2.54.0",
+      "label": "v2.54",
+      "date": "2026-07-10",
+      "title": "Automated dashboard update",
+      "level": "minor"
+    },
+    {
+      "version": "2.53.0",
+      "label": "v2.53",
+      "date": "2026-07-10",
+      "title": "Automated dashboard update",
+      "level": "minor"
+    },
+    {
+      "version": "2.52.0",
+      "label": "v2.52",
+      "date": "2026-07-10",
+      "title": "Fast simulation export feedback and workbook optimization",
+      "level": "minor"
+    },
+    {
+      "version": "2.51.0",
+      "label": "v2.51",
+      "date": "2026-07-10",
+      "title": "Automated dashboard update",
+      "level": "minor"
+    },
+    {
+      "version": "2.50.0",
+      "label": "v2.50",
+      "date": "2026-07-10",
+      "title": "Automated dashboard update",
+      "level": "minor"
+    },
+    {
+      "version": "2.49.0",
+      "label": "v2.49",
+      "date": "2026-07-10",
+      "title": "Fix simulation Excel export against missing columns",
+      "level": "patch"
+    },
+    {
+      "version": "2.48.0",
+      "label": "v2.48",
+      "date": "2026-07-10",
+      "title": "Automated dashboard update",
+      "level": "minor"
+    },
+    {
+      "version": "2.47.0",
+      "label": "v2.47",
+      "date": "2026-07-10",
+      "title": "Automated dashboard update",
+      "level": "minor"
+    },
+    {
+      "version": "2.46.0",
+      "label": "v2.46",
+      "date": "2026-07-10",
+      "title": "Automated dashboard update",
+      "level": "minor"
+    },
+    {
+      "version": "2.45.0",
+      "label": "v2.45",
+      "date": "2026-07-10",
+      "title": "Automated dashboard update",
+      "level": "minor"
+    },
+    {
+      "version": "2.44.0",
+      "label": "v2.44",
+      "date": "2026-07-09",
+      "title": "Automated dashboard update",
+      "level": "minor"
+    },
+    {
+      "version": "2.43.0",
+      "label": "v2.43",
+      "date": "2026-07-09",
+      "title": "Add detailed route breadcrumbs",
+      "level": "minor"
+    },
+    {
+      "version": "2.42.0",
+      "label": "v2.42",
+      "date": "2026-07-09",
+      "title": "Automated dashboard update",
+      "level": "minor"
+    },
+    {
+      "version": "2.41.0",
+      "label": "v2.41",
+      "date": "2026-07-09",
+      "title": "Add route-based navigation and breadcrumbs",
+      "level": "minor"
+    },
+    {
+      "version": "2.39.0",
+      "label": "v2.39",
+      "date": "2026-07-09",
+      "title": "Fix settings refresh to prefer DB-backed values",
+      "level": "minor"
+    },
+    {
+      "version": "2.38.0",
+      "label": "v2.38",
+      "date": "2026-07-09",
+      "title": "Automated dashboard update",
+      "level": "minor"
+    },
+    {
+      "version": "2.37.0",
+      "label": "v2.37",
+      "date": "2026-07-09",
+      "title": "Persist browser notifications in SQLite database",
+      "level": "minor"
+    },
+    {
+      "version": "2.36.0",
+      "label": "v2.36",
+      "date": "2026-07-09",
+      "title": "Automated dashboard update",
+      "level": "minor"
+    },
+    {
+      "version": "2.35.0",
+      "label": "v2.35",
+      "date": "2026-07-09",
+      "title": "Persist dashboard settings in SQLite database",
+      "level": "minor"
+    },
+    {
+      "version": "2.33.0",
+      "label": "v2.33",
+      "date": "2026-07-09",
+      "title": "Automated dashboard update",
+      "level": "minor"
+    },
+    {
+      "version": "2.32.0",
+      "label": "v2.32",
+      "date": "2026-07-09",
+      "title": "Automated dashboard update",
+      "level": "minor"
+    },
+    {
+      "version": "2.31.0",
+      "label": "v2.31",
+      "date": "2026-07-09",
+      "title": "Automated dashboard update",
+      "level": "minor"
+    },
+    {
+      "version": "2.30.0",
+      "label": "v2.30",
+      "date": "2026-07-09",
+      "title": "Automated dashboard update",
+      "level": "minor"
+    },
+    {
+      "version": "2.29.0",
+      "label": "v2.29",
+      "date": "2026-07-09",
+      "title": "Facebook preview tabs, publish progress UI, and sent history",
+      "level": "minor"
+    },
+    {
+      "version": "2.28.0",
+      "label": "v2.28",
+      "date": "2026-07-09",
+      "title": "Automated dashboard update",
+      "level": "minor"
+    },
+    {
+      "version": "2.27.0",
+      "label": "v2.27",
+      "date": "2026-07-09",
+      "title": "Automated dashboard update",
+      "level": "minor"
+    },
+    {
+      "version": "2.26.0",
+      "label": "v2.26",
+      "date": "2026-07-09",
+      "title": "Automated dashboard update",
+      "level": "minor"
+    },
+    {
+      "version": "2.25.0",
+      "label": "v2.25",
+      "date": "2026-07-09",
+      "title": "Automated dashboard update",
+      "level": "minor"
+    },
+    {
+      "version": "2.24.0",
+      "label": "v2.24",
+      "date": "2026-07-09",
+      "title": "Automated dashboard update",
+      "level": "minor"
+    },
+    {
+      "version": "2.23.0",
+      "label": "v2.23",
+      "date": "2026-07-09",
+      "title": "Automated dashboard update",
+      "level": "minor"
+    },
+    {
+      "version": "2.22.0",
+      "label": "v2.22",
+      "date": "2026-07-09",
+      "title": "Automated dashboard update",
+      "level": "minor"
+    },
+    {
+      "version": "2.21.0",
+      "label": "v2.21",
+      "date": "2026-07-09",
+      "title": "Automated dashboard update",
+      "level": "minor"
+    },
+    {
+      "version": "2.20.0",
+      "label": "v2.20",
+      "date": "2026-07-09",
+      "title": "Automated dashboard update",
+      "level": "minor"
+    },
+    {
+      "version": "2.19.0",
+      "label": "v2.19",
+      "date": "2026-07-09",
+      "title": "Automated dashboard update",
+      "level": "minor"
+    },
+    {
+      "version": "2.18.0",
+      "label": "v2.18",
+      "date": "2026-07-09",
+      "title": "Automated dashboard update",
+      "level": "minor"
+    },
+    {
+      "version": "2.17.0",
+      "label": "v2.17",
+      "date": "2026-07-09",
+      "title": "Automated dashboard update",
+      "level": "minor"
+    },
+    {
+      "version": "2.16.0",
+      "label": "v2.16",
+      "date": "2026-07-09",
+      "title": "Automated dashboard update",
+      "level": "minor"
+    },
+    {
+      "version": "2.15.0",
+      "label": "v2.15",
+      "date": "2026-07-09",
+      "title": "Automated dashboard update",
+      "level": "minor"
+    },
+    {
+      "version": "2.14.0",
+      "label": "v2.14",
+      "date": "2026-07-09",
+      "title": "Automated dashboard update",
+      "level": "minor"
+    },
+    {
+      "version": "2.13.0",
+      "label": "v2.13",
+      "date": "2026-07-08",
+      "title": "Automated dashboard update",
+      "level": "minor"
+    },
+    {
+      "version": "2.12.0",
+      "label": "v2.12",
+      "date": "2026-07-08",
+      "title": "Automated dashboard update",
+      "level": "minor"
+    },
+    {
+      "version": "2.11.0",
+      "label": "v2.11",
+      "date": "2026-07-08",
+      "title": "Polish mobile login and control layouts",
+      "level": "minor"
+    },
+    {
+      "version": "2.10.1",
+      "label": "v2.10",
+      "date": "2026-07-08",
+      "title": "Fix notification pause — respect NOTIFICATIONS_PAUSED on strategy apply",
+      "level": "patch"
+    },
+    {
+      "version": "2.10.0",
+      "label": "v2.10",
+      "date": "2026-07-08",
+      "title": "Strategy version performance — win rate & signals per .mq5 version",
+      "level": "minor"
+    },
+    {
+      "version": "2.9.0",
+      "label": "v2.9",
+      "date": "2026-07-08",
+      "title": "MT5 strategy upload — analyst .mq5 drag-and-drop",
+      "level": "minor"
+    },
+    {
+      "version": "2.8.7",
+      "label": "v2.8",
+      "date": "2026-07-08",
+      "title": "Settings save syncs min score and poll across dashboard",
+      "level": "patch"
+    },
+    {
+      "version": "2.8.6",
+      "label": "v2.8",
+      "date": "2026-07-08",
+      "title": "Fix notification pause/resume controls and UI refresh",
+      "level": "patch"
+    },
+    {
+      "version": "2.8.5",
+      "label": "v2.8",
+      "date": "2026-07-08",
+      "title": "Fix stop/start controls — mgmtBusy undefined",
+      "level": "patch"
+    },
+    {
+      "version": "2.8.4",
+      "label": "v2.8",
+      "date": "2026-07-08",
+      "title": "Stop CPU/RAM/Disk alerts from going to Telegram",
+      "level": "patch"
+    },
+    {
+      "version": "2.8.3",
+      "label": "v2.8",
+      "date": "2026-07-08",
+      "title": "Fix monitor hero fields and live clock not loading",
+      "level": "patch"
+    },
+    {
+      "version": "2.8.2",
+      "label": "v2.8",
+      "date": "2026-07-08",
+      "title": "Shared enrich cache + bootstrap analytics for instant reports",
+      "level": "patch"
+    },
+    {
+      "version": "2.8.1",
+      "label": "v2.8",
+      "date": "2026-07-08",
+      "title": "Fast cache layer — instant paint, server-side parse cache",
+      "level": "patch"
+    },
+    {
+      "version": "2.8.0",
+      "label": "v2.8",
+      "date": "2026-07-08",
+      "title": "Alerts & operations — monitoring, webhooks, backup, audit",
+      "level": "minor"
+    },
+    {
+      "version": "2.7.0",
+      "label": "v2.7",
+      "date": "2026-07-08",
+      "title": "Per-symbol reports, cooldown dashboard, hourly heatmap",
+      "level": "minor"
+    },
+    {
+      "version": "2.6.0",
+      "label": "v2.6",
+      "date": "2026-07-08",
+      "title": "Home KPIs, outcome tracking, Telegram test/retry",
+      "level": "minor"
+    },
+    {
+      "version": "2.5.0",
+      "label": "v2.5",
+      "date": "2026-07-08",
+      "title": "Redesigned settings page with symbol picker modal",
+      "level": "minor"
+    },
+    {
+      "version": "2.4.0",
+      "label": "v2.4",
+      "date": "2026-07-08",
+      "title": "Symbol manager modal on control page",
+      "level": "minor"
+    },
+    {
+      "version": "2.3.0",
+      "label": "v2.3",
+      "date": "2026-07-08",
+      "title": "Professional signals page with delivery tracking",
+      "level": "minor"
+    },
+    {
+      "version": "2.2.0",
+      "label": "v2.2",
+      "date": "2026-07-08",
+      "title": "Redesigned robot control page",
+      "level": "minor"
+    },
+    {
+      "version": "2.1.0",
+      "label": "v2.1",
+      "date": "2026-07-08",
+      "title": "Telegram log, smart cache, auto-deploy",
+      "level": "minor"
+    },
+    {
+      "version": "2.0.0",
+      "label": "v2.0",
+      "date": "2026-07-07",
+      "title": "Multi-page dashboard redesign",
+      "level": "major"
+    }
+  ]
+}

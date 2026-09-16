@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trading Bot Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/dashboard.css?v=20" />
+  <link rel="stylesheet" href="/static/css/layout.css?v=2.55.1" />
+  <script src="/static/vendor/chart.umd.min.js?v=2"></script>
+</head>
+<body class="auth-pending">
+  <div class="bg-mesh"></div>
+  <div class="bg-grid"></div>
+
+  <!-- Login (unchanged structure) -->
+  <div class="login-overlay" id="loginOverlay">
+    <div class="login-orbs">
+      <div class="login-orb orb-1"></div>
+      <div class="login-orb orb-2"></div>
+      <div class="login-orb orb-3"></div>
+    </div>
+    <div class="login-wrap animate-in">
+      <div class="login-brand">
+        <div class="login-brand-inner">
+          <div class="brand-logo"><div class="brand-logo-ring"></div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <span class="brand-tag">Forex TradeChi</span>
+          <h1 class="brand-title">Signal Bot<br/><span>Control Panel</span></h1>
+          <p class="brand-desc">مدیریت حرفه‌ای ربات سیگنال‌دهی</p>
+        </div>
+      </div>
+      <div class="login-panel">
+        <div class="login-panel-inner">
+          <div class="login-panel-header"><h2>ورود به داشبورد</h2><p>نام کاربری و رمز عبور</p></div>
+          <form id="loginForm" class="login-form">
+            <div class="field-group"><label for="loginUsername">نام کاربری</label>
+              <div class="input-wrap"><svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <input type="text" id="loginUsername" placeholder="admin" autocomplete="username" /></div></div>
+            <div class="field-group"><label for="loginPassword">رمز عبور</label>
+              <div class="input-wrap"><svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password" />
+                <button type="button" class="toggle-pw" id="togglePassword" aria-label="Show password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
+            <button type="submit" class="login-submit" id="loginSubmit"><span class="login-submit-text">ورود به پنل</span><span class="login-submit-loader hidden"></span></button>
+          </form>
+          <p class="login-error" id="loginError"></p>
+          <div class="login-footer">
+            <span class="domain-badge"><span class="domain-dot"></span>testmachine.store</span>
+            <span class="version-badge" id="loginVersion">v2.55</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- App Shell -->
+  <div class="app-shell hidden" id="dashboard">
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Right Sidebar — collapsible groups, expandable width -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <div class="sidebar-logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <div class="sidebar-brand-text">
+          <strong>TradeChi Bot</strong>
+          <span class="sidebar-subtitle">Control Panel <span class="version-badge" id="sidebarVersion">v2.55</span></span>
+        </div>
+        <button type="button" class="sidebar-collapse-btn" id="sidebarCollapseBtn" aria-label="جمع/باز کردن منو" title="جمع کردن منو">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+      </div>
+
+      <nav class="sidebar-nav" id="sidebarNav" aria-label="منوی اصلی"></nav>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-meta">
+          <span class="version-pill" id="sidebarVersionFull" title="نسخه داشبورد">2.55.0</span>
+        </div>
+        <div class="sidebar-status" id="sidebarStatus">
+          <span class="sidebar-status-dot"></span>
+          <span id="sidebarStatusText">—</span>
+        </div>
+        <button class="nav-item logout" id="btnLogout">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+          <span>خروج</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-area">
+      <header class="topbar">
+        <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div class="topbar-title">
+          <div class="topbar-breadcrumb" aria-label="مسیر صفحه">
+            <span class="topbar-breadcrumb-domain">testmachine.store</span>
+            <span class="topbar-breadcrumb-sep">/</span>
+            <span class="topbar-breadcrumb-section" id="pageBreadcrumbSection">dashboard</span>
+            <span class="topbar-breadcrumb-sep">/</span>
+            <span class="topbar-breadcrumb-page" id="pageBreadcrumbRoute">home</span>
+          </div>
+          <h1 id="pageTitle">داشبورد</h1>
+          <span class="topbar-sub" id="pageSub">نمای کلی ربات</span>
+        </div>
+        <div class="topbar-route-pill" id="pageRoutePill" title="مسیر فعلی">/</div>
+        <div class="topbar-actions">
+          <div class="live-badge"><span class="live-dot"></span><span id="liveTime">--:--:--</span></div>
+          <button class="btn btn-success btn-compact" id="btnStartAll"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="8,5 19,12 8,19"/></svg><span>روشن</span></button>
+          <button class="btn btn-danger btn-compact" id="btnStopAll"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="1"/></svg><span>توقف</span></button>
+        </div>
+      </header>
+
+      <div class="page-content">
+
+        <!-- PAGE: Home -->
+        <div class="page active" id="page-home">
+
+          <!-- Hero Status -->
+          <section class="home-hero">
+            <div class="hero-bg"></div>
+            <div class="hero-body">
+              <div class="hero-main">
+                <div class="hero-status-row">
+                  <span class="status-pill" id="heroStatusPill"><span class="status-indicator" id="statusIndicator"></span><span id="heroStatusText">—</span></span>
+                  <span class="hero-time" id="heroUpdated">—</span>
+                </div>
+                <h2 class="hero-title" id="statusLabel">در حال بارگذاری...</h2>
+                <p class="hero-sub" id="statusSub"></p>
+                <div class="hero-chips">
+                  <div class="hero-chip"><span class="chip-lbl">دامنه</span><span class="chip-val">testmachine.store</span></div>
+                  <div class="hero-chip"><span class="chip-lbl">سرور</span><span class="chip-val" id="hostTag">—</span></div>
+                  <div class="hero-chip"><span class="chip-lbl">Uptime</span><span class="chip-val" id="heroUptime">—</span></div>
+                </div>
+              </div>
+              <div class="hero-side">
+                <p class="hero-side-label">سرویس‌ها</p>
+                <div class="hero-services" id="homeProcesses"></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- KPI Cards -->
+          <section class="kpi-grid pro home-kpi-extended">
+            <article class="kpi-card pro today">
+              <div class="kpi-icon">📊</div>
+              <div class="kpi-body"><span class="kpi-val" id="kpiToday">0</span><span class="kpi-lbl">سیگنال امروز</span></div>
+            </article>
+            <article class="kpi-card pro">
+              <div class="kpi-icon">∑</div>
+              <div class="kpi-body"><span class="kpi-val" id="kpiTotal">0</span><span class="kpi-lbl">کل سیگنال‌ها</span></div>
+            </article>
+            <article class="kpi-card pro buy">
+              <div class="kpi-icon">↑</div>
+              <div class="kpi-body"><span class="kpi-val" id="kpiBuy">0</span><span class="kpi-lbl">BUY</span></div>
+            </article>
+            <article class="kpi-card pro sell">
+              <div class="kpi-icon">↓</div>
+              <div class="kpi-body"><span class="kpi-val" id="kpiSell">0</span><span class="kpi-lbl">SELL</span></div>
+            </article>
+            <article class="kpi-card pro win">
+              <div class="kpi-icon">◎</div>
+              <div class="kpi-body"><span class="kpi-val" id="kpiWinRate">—</span><span class="kpi-lbl">نرخ برد</span></div>
+            </article>
+            <article class="kpi-card pro delivery">
+              <div class="kpi-icon">✓</div>
+              <div class="kpi-body"><span class="kpi-val" id="kpiDeliveryRate">—</span><span class="kpi-lbl">ارسال تلگرام</span></div>
+            </article>
+          </section>
+
+          <!-- Recent signals + health -->
+          <section class="home-secondary">
+            <article class="panel home-recent-panel">
+              <div class="panel-top">
+                <h3 class="panel-heading">آخرین سیگنال‌ها</h3>
+                <button class="link-btn" data-goto="signals">همه ←</button>
+              </div>
+              <div class="home-recent-feed" id="homeRecentSignals"></div>
+            </article>
+            <article class="panel home-health-panel">
+              <div class="panel-top">
+                <h3 class="panel-heading">سلامت سیستم</h3>
+                <button class="link-btn" data-goto="monitor">جزئیات ←</button>
+              </div>
+              <div class="home-health-body">
+                <div class="home-health-score">
+                  <span class="home-health-num" id="homeHealthScore">—</span>
+                  <span class="home-health-lbl" id="homeHealthLabel">—</span>
+                </div>
+                <div class="home-health-meta">
+                  <span>برد امروز: <strong id="homeTodayWins">0</strong></span>
+                  <span>باخت امروز: <strong id="homeTodayLosses">0</strong></span>
+                  <span>باز: <strong id="homeOpenSignals">0</strong></span>
+                </div>
+              </div>
+            </article>
+          </section>
+
+          <!-- Main Home Grid -->
+          <section class="home-grid">
+            <article class="panel panel-highlight">
+              <div class="panel-top">
+                <h3 class="panel-heading">آخرین سیگنال</h3>
+                <button class="link-btn" data-goto="signals">مشاهده همه ←</button>
+              </div>
+              <div class="signal-ticket" id="latestSignal"></div>
+            </article>
+
+            <article class="panel">
+              <div class="panel-top">
+                <h3 class="panel-heading">توزیع نمادها</h3>
+              </div>
+              <div class="chart-box home-chart"><canvas id="symbolChart"></canvas></div>
+              <div class="symbol-legend" id="symbolLegend"></div>
+            </article>
+
+            <article class="panel">
+              <div class="panel-top">
+                <h3 class="panel-heading">فعالیت ۷ روز اخیر</h3>
+              </div>
+              <div class="chart-box home-chart-sm"><canvas id="homeSparkline"></canvas></div>
+              <div class="panel-top" style="margin-top:1rem;margin-bottom:0.5rem">
+                <h3 class="panel-heading">سلامت نمادها</h3>
+              </div>
+              <div class="symbol-health" id="symbolHealth"></div>
+            </article>
+          </section>
+
+          <!-- Quick Actions -->
+          <section class="quick-actions home-ops">
+            <button type="button" class="quick-btn ops" id="homeBtnSymbols"><span>📋</span>نمادها</button>
+            <button type="button" class="quick-btn ops" id="homeBtnTelegramTest"><span>📨</span>تست تلگرام</button>
+            <button type="button" class="quick-btn ops" id="homeBtnPauseNotif"><span>⏸</span>توقف ارسال</button>
+            <button type="button" class="quick-btn ops" id="homeBtnResumeNotif"><span>▶</span>ادامه ارسال</button>
+          </section>
+          <section class="quick-actions">
+            <button class="quick-btn" data-goto="control"><span>⚙️</span>کنترل ربات</button>
+            <button class="quick-btn" data-goto="reports"><span>📈</span>گزارش Excel</button>
+            <button class="quick-btn" data-goto="monitor"><span>🖥</span>مانیتورینگ</button>
+            <button class="quick-btn" data-goto="logs"><span>⌘</span>لاگ زنده</button>
+          </section>
+        </div>
+
+        <!-- PAGE: Monitor -->
+        <div class="page" id="page-monitor">
+
+          <!-- Monitor Hero -->
+          <section class="monitor-hero">
+            <div class="hero-bg"></div>
+            <div class="monitor-hero-body">
+              <div class="monitor-hero-main">
+                <div class="hero-status-row">
+                  <span class="status-pill" id="monitorHealthPill"><span class="status-indicator" id="monitorHealthDot"></span><span id="monitorHealthLabel">—</span></span>
+                  <span class="hero-time" id="monitorSyncTime">آخرین بروزرسانی: —</span>
+                </div>
+                <h2 class="hero-title" id="monitorHostTitle">سرور</h2>
+                <p class="hero-sub" id="monitorHostSub">منابع سیستم و موتور تحلیل</p>
+                <div class="hero-chips">
+                  <div class="hero-chip"><span class="chip-lbl">Hostname</span><span class="chip-val" id="monHost">—</span></div>
+                  <div class="hero-chip"><span class="chip-lbl">Uptime</span><span class="chip-val" id="monUptime">—</span></div>
+                  <div class="hero-chip"><span class="chip-lbl">Health Score</span><span class="chip-val" id="monHealthScore">—</span></div>
+                  <div class="hero-chip"><span class="chip-lbl">Bot RAM</span><span class="chip-val" id="monBotRam">—</span></div>
+                </div>
+              </div>
+              <div class="monitor-score-ring">
+                <svg viewBox="0 0 120 120" class="score-svg">
+                  <circle class="score-track" cx="60" cy="60" r="52"/>
+                  <circle class="score-fill" id="monitorScoreArc" cx="60" cy="60" r="52"/>
+                </svg>
+                <div class="score-center">
+                  <span class="score-num" id="monitorScoreNum">—</span>
+                  <span class="score-lbl">سلامت</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Resource Gauges -->
+          <section class="monitor-gauges">
+            <article class="gauge-card cpu">
+              <div class="gauge-top">
+                <div class="gauge-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg></div>
+                <div class="gauge-meta"><span class="gauge-label">CPU</span><span class="gauge-value" id="cpuValue">0%</span></div>
+              </div>
+              <div class="gauge-ring-wrap">
+                <svg viewBox="0 0 80 80" class="mini-gauge"><circle class="gauge-track" cx="40" cy="40" r="34"/><circle class="gauge-fill cpu-gauge" id="cpuGaugeArc" cx="40" cy="40" r="34"/></svg>
+              </div>
+              <div class="gauge-footer"><span>ربات</span><strong id="cpuBot">0%</strong></div>
+              <div class="gauge-spark"><canvas id="cpuSpark"></canvas></div>
+            </article>
+
+            <article class="gauge-card ram">
+              <div class="gauge-top">
+                <div class="gauge-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 19v-3M10 19v-3M14 19v-3M18 19v-3M8 11V9M12 11V9M16 11V9M6 15h12a2 2 0 002-2V7H4v6a2 2 0 002 2z"/></svg></div>
+                <div class="gauge-meta"><span class="gauge-label">RAM</span><span class="gauge-value" id="ramValue">0%</span></div>
+              </div>
+              <div class="gauge-ring-wrap">
+                <svg viewBox="0 0 80 80" class="mini-gauge"><circle class="gauge-track" cx="40" cy="40" r="34"/><circle class="gauge-fill ram-gauge" id="ramGaugeArc" cx="40" cy="40" r="34"/></svg>
+              </div>
+              <div class="gauge-footer"><span><strong id="ramTotal">0</strong> GB</span><span>ربات <strong id="ramBot">0</strong> MB</span></div>
+              <div class="gauge-spark"><canvas id="ramSpark"></canvas></div>
+            </article>
+
+            <article class="gauge-card disk">
+              <div class="gauge-top">
+                <div class="gauge-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></div>
+                <div class="gauge-meta"><span class="gauge-label">DISK</span><span class="gauge-value" id="diskValue">0%</span></div>
+              </div>
+              <div class="gauge-ring-wrap">
+                <svg viewBox="0 0 80 80" class="mini-gauge"><circle class="gauge-track" cx="40" cy="40" r="34"/><circle class="gauge-fill disk-gauge" id="diskGaugeArc" cx="40" cy="40" r="34"/></svg>
+              </div>
+              <div class="gauge-footer"><span>آزاد</span><strong id="diskFree">0</strong> GB</div>
+              <div class="gauge-spark"><canvas id="diskSpark"></canvas></div>
+            </article>
+
+            <article class="gauge-card net">
+              <div class="gauge-top">
+                <div class="gauge-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0114.08 0"/><path d="M1.42 9a16 16 0 0121.16 0"/><path d="M8.53 16.11a6 6 0 016.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg></div>
+                <div class="gauge-meta"><span class="gauge-label">NET</span><span class="gauge-value" id="netValue">0</span></div>
+              </div>
+              <div class="net-dual">
+                <div class="net-stat down"><span class="net-arrow">↓</span><div class="net-stat-body"><span class="net-stat-lbl">Download</span><span class="net-stat-val" id="netDown">0 KB/s</span><div class="progress-bar sm"><div class="progress-fill net-down" id="netDownBar"></div></div></div></div>
+                <div class="net-stat up"><span class="net-arrow">↑</span><div class="net-stat-body"><span class="net-stat-lbl">Upload</span><span class="net-stat-val" id="netUp">0 KB/s</span><div class="progress-bar sm"><div class="progress-fill net-up" id="netUpBar"></div></div></div></div>
+              </div>
+              <div class="gauge-spark"><canvas id="netSpark"></canvas></div>
+            </article>
+          </section>
+
+          <!-- Charts + Processes -->
+          <section class="monitor-grid">
+            <article class="panel panel-wide">
+              <div class="panel-top">
+                <h3 class="panel-heading">روند منابع (زنده)</h3>
+                <div class="chart-legend-inline">
+                  <span class="legend-dot" style="background:#5b9cf6"></span> CPU
+                  <span class="legend-dot" style="background:#63ffd0"></span> RAM
+                  <span class="legend-dot" style="background:#fbbf24"></span> Disk
+                  <span class="legend-dot" style="background:#a78bfa"></span> Net
+                </div>
+                <button type="button" class="btn btn-sm btn-export csv" id="btnExportMetrics">CSV</button>
+              </div>
+              <div class="chart-box monitor-chart">
+                <canvas id="resourceHistoryChart"></canvas>
+                <p class="chart-empty-hint" id="resourceChartEmpty">در حال دریافت داده زنده...</p>
+              </div>
+            </article>
+
+            <article class="panel">
+              <div class="panel-top">
+                <h3 class="panel-heading">فرآیندهای PM2</h3>
+                <button class="link-btn" data-goto="control">مدیریت ←</button>
+              </div>
+              <div class="monitor-processes" id="monitorProcesses"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-top">
+                <h3 class="panel-heading">ری‌استارت PM2 (۲۴h)</h3>
+                <span class="hint" id="uptimeHistoryMeta">—</span>
+              </div>
+              <div class="uptime-history" id="uptimeHistory"></div>
+            </article>
+          </section>
+
+          <!-- Engine Status -->
+          <section class="panel monitor-engine-panel">
+            <div class="panel-top">
+              <div>
+                <h3 class="panel-heading">وضعیت موتور تحلیل</h3>
+                <p class="panel-desc" id="engineUpdatedAt">—</p>
+              </div>
+              <div class="engine-summary-chips" id="engineSummaryChips"></div>
+            </div>
+            <div class="engine-cards" id="engineInfo"></div>
+          </section>
+
+        </div>
+
+        <!-- PAGE: Control -->
+        <div class="page" id="page-control">
+
+          <!-- Control Hero -->
+          <section class="control-hero">
+            <div class="hero-bg"></div>
+            <div class="control-hero-body">
+              <div class="control-hero-main">
+                <div class="hero-status-row">
+                  <span class="status-pill" id="ctrlStatusPill"><span class="status-indicator" id="ctrlStatusDot"></span><span id="ctrlStatusLabel">—</span></span>
+                  <span class="hero-time" id="ctrlUpdated">—</span>
+                </div>
+                <h2 class="hero-title">مرکز کنترل ربات</h2>
+                <p class="hero-sub" id="ctrlStatusSub">مدیریت PM2، نوتیفیکیشن و عملیات موتور</p>
+                <div class="control-status-chips" id="controlStatusChips"></div>
+              </div>
+              <div class="control-quick-actions">
+                <button type="button" class="ctrl-quick-btn start" id="ctrlStartAll" title="روشن کردن همه">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="8,5 19,12 8,19"/></svg>
+                  <span>روشن</span>
+                </button>
+                <button type="button" class="ctrl-quick-btn stop" id="ctrlStopAll" title="توقف همه">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="1"/></svg>
+                  <span>توقف</span>
+                </button>
+                <button type="button" class="ctrl-quick-btn restart" id="ctrlRestartAll" title="ری‌استارت ربات">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+                  <span>ری‌استارت</span>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Config snapshot -->
+          <section class="control-config-bar" id="controlConfigBar"></section>
+
+          <!-- Symbols preview -->
+          <article class="panel symbols-panel" id="controlSymbolsPanel">
+            <div class="panel-top symbols-panel-top">
+              <div>
+                <h3 class="panel-heading">نمادهای تحلیل</h3>
+                <p class="panel-desc">نمادهایی که موتور روی آن‌ها سیگنال تولید می‌کند</p>
+              </div>
+              <button type="button" class="btn btn-primary btn-compact" id="btnManageSymbols">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M12 5v14M5 12h14"/></svg>
+                مدیریت نمادها
+              </button>
+            </div>
+            <div class="symbols-preview" id="symbolsPreview"></div>
+          </article>
+
+          <article class="panel cooldown-panel">
+            <div class="panel-top">
+              <div>
+                <h3 class="panel-heading">وضعیت Cooldown</h3>
+                <p class="panel-desc">زمان باقی‌مانده تا سیگنال بعدی هر نماد</p>
+              </div>
+              <span class="hint" id="cooldownMeta">—</span>
+            </div>
+            <div class="cooldown-list" id="cooldownList"></div>
+          </article>
+
+          <div class="control-grid">
+            <!-- Management sections -->
+            <div class="control-col">
+              <article class="panel">
+                <div class="panel-top">
+                  <h3 class="panel-heading">نوتیفیکیشن</h3>
+                  <p class="panel-desc">کنترل ارسال سیگنال به تلگرام</p>
+                </div>
+                <div class="mgmt-grid mgmt-grid-2">
+                  <button type="button" class="mgmt-card v2" id="btnPauseNotif" data-mgmt="pause_notifications">
+                    <span class="mgmt-icon pause">⏸</span>
+                    <span class="mgmt-label">توقف نوتیفیکیشن</span>
+                    <span class="mgmt-desc">متوقف کردن موتور</span>
+                  </button>
+                  <button type="button" class="mgmt-card v2" id="btnResumeNotif" data-mgmt="resume_notifications">
+                    <span class="mgmt-icon play">▶</span>
+                    <span class="mgmt-label">ادامه نوتیفیکیشن</span>
+                    <span class="mgmt-desc">راه‌اندازی مجدد</span>
+                  </button>
+                </div>
+              </article>
+
+              <article class="panel">
+                <div class="panel-top">
+                  <h3 class="panel-heading">موتور تحلیل</h3>
+                  <p class="panel-desc">تنظیمات runtime موتور سیگنال</p>
+                </div>
+                <div class="mgmt-grid mgmt-grid-2">
+                  <button type="button" class="mgmt-card v2" id="btnResetCooldown" data-mgmt="reset_cooldowns">
+                    <span class="mgmt-icon reset">⟲</span>
+                    <span class="mgmt-label">ریست Cooldown</span>
+                    <span class="mgmt-desc">آزادسازی محدودیت زمانی</span>
+                  </button>
+                  <button type="button" class="mgmt-card v2" id="btnResetStartup" data-mgmt="reset_startup_flag">
+                    <span class="mgmt-icon reset">🚀</span>
+                    <span class="mgmt-label">ریست Startup</span>
+                    <span class="mgmt-desc">پیام شروع مجدد</span>
+                  </button>
+                  <button type="button" class="mgmt-card v2" id="btnToggleDebug" data-mgmt="toggle_debug">
+                    <span class="mgmt-icon debug">⚙</span>
+                    <span class="mgmt-label">Debug Engine</span>
+                    <span class="mgmt-desc" id="debugStatus">خاموش</span>
+                  </button>
+                </div>
+              </article>
+
+              <article class="panel">
+                <div class="panel-top">
+                  <h3 class="panel-heading">نگهداری</h3>
+                  <p class="panel-desc">عملیات سیستمی و لاگ</p>
+                </div>
+                <div class="mgmt-grid mgmt-grid-2">
+                  <button type="button" class="mgmt-card v2" id="btnFlushLogs" data-mgmt="flush_logs" data-confirm="لاگ‌های PM2 پاک شوند؟">
+                    <span class="mgmt-icon logs">⌫</span>
+                    <span class="mgmt-label">پاکسازی لاگ</span>
+                    <span class="mgmt-desc">PM2 flush</span>
+                  </button>
+                  <button type="button" class="mgmt-card v2" id="btnRestartDashboard" data-mgmt="restart_dashboard" data-confirm="داشبورد ری‌استارت شود؟">
+                    <span class="mgmt-icon restart">↻</span>
+                    <span class="mgmt-label">ری‌استارت داشبورد</span>
+                    <span class="mgmt-desc">PM2 dashboard</span>
+                  </button>
+                </div>
+              </article>
+            </div>
+
+            <!-- Processes + Activity -->
+            <div class="control-col">
+              <article class="panel">
+                <div class="panel-top">
+                  <h3 class="panel-heading">فرآیندهای PM2</h3>
+                  <button type="button" class="link-btn" id="btnRefreshProcesses">بروزرسانی ↻</button>
+                </div>
+                <div class="process-cards v2" id="processCards"></div>
+              </article>
+
+              <article class="panel">
+                <div class="panel-top">
+                  <h3 class="panel-heading">فعالیت اخیر</h3>
+                  <button type="button" class="link-btn" id="btnClearActivity">پاک کردن</button>
+                </div>
+                <ul class="control-activity" id="controlActivity"></ul>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAGE: Signals -->
+        <div class="page" id="page-signals">
+
+          <section class="signals-hero">
+            <div class="hero-bg"></div>
+            <div class="signals-hero-body">
+              <div>
+                <div class="hero-status-row">
+                  <span class="status-pill" id="sigHeroPill"><span class="status-indicator running" id="sigHeroDot"></span><span id="sigHeroLabel">سیگنال‌ها</span></span>
+                  <span class="hero-time" id="sigHeroUpdated">—</span>
+                </div>
+                <h2 class="hero-title">تاریخچه سیگنال‌ها</h2>
+                <p class="hero-sub">ردیابی ارسال، خطا و کیفیت هر سیگنال</p>
+              </div>
+              <div class="signals-hero-stats">
+                <div class="sig-stat ok"><span class="sig-stat-num" id="sigSentTotal">0</span><span class="sig-stat-lbl">ارسال موفق</span></div>
+                <div class="sig-stat fail"><span class="sig-stat-num" id="sigFailedTotal">0</span><span class="sig-stat-lbl">خطا / اشتباه</span></div>
+                <div class="sig-stat warn"><span class="sig-stat-num" id="sigUnsentTotal">0</span><span class="sig-stat-lbl">بدون تأیید</span></div>
+                <div class="sig-stat"><span class="sig-stat-num" id="sigRateTotal">0%</span><span class="sig-stat-lbl">نرخ ارسال</span></div>
+              </div>
+            </div>
+          </section>
+
+          <div class="page-toolbar signals-toolbar">
+            <input type="search" id="signalSearch" class="search-input" placeholder="جستجو نماد..." />
+            <select id="signalDays" class="select-input">
+              <option value="7">۷ روز</option>
+              <option value="30" selected>۳۰ روز</option>
+              <option value="90">۹۰ روز</option>
+              <option value="365">۱ سال</option>
+            </select>
+            <select id="signalDelivery" class="select-input">
+              <option value="all">همه وضعیت‌ها</option>
+              <option value="sent">✓ ارسال موفق</option>
+              <option value="failed">✗ خطای ارسال</option>
+              <option value="unsent">؟ بدون تأیید</option>
+              <option value="mistaken">⚠ مشکوک / تکراری</option>
+            </select>
+            <select id="signalDirection" class="select-input">
+              <option value="all">BUY + SELL</option>
+              <option value="BUY">BUY</option>
+              <option value="SELL">SELL</option>
+            </select>
+            <select id="signalOutcome" class="select-input">
+              <option value="all">همه نتایج</option>
+              <option value="win">✓ برد (TP)</option>
+              <option value="loss">✗ باخت (SL)</option>
+              <option value="open">○ باز</option>
+              <option value="tp1">TP1</option>
+              <option value="tp2">TP2</option>
+              <option value="sl">SL</option>
+            </select>
+            <div class="toolbar-stats signals-toolbar-stats">
+              <span>امروز: <strong id="sigToday">0</strong></span>
+              <span>کل: <strong id="sigTotal">0</strong></span>
+            </div>
+          </div>
+
+          <section class="signals-kpi">
+            <div class="sig-kpi buy"><span class="sig-kpi-num" id="sigBuyCount">0</span><span class="sig-kpi-lbl">BUY</span></div>
+            <div class="sig-kpi sell"><span class="sig-kpi-num" id="sigSellCount">0</span><span class="sig-kpi-lbl">SELL</span></div>
+            <div class="sig-kpi"><span class="sig-kpi-num" id="sigDupCount">0</span><span class="sig-kpi-lbl">تکراری</span></div>
+            <div class="sig-kpi"><span class="sig-kpi-num" id="sigTopSymbol">—</span><span class="sig-kpi-lbl">پرسیگنال‌ترین</span></div>
+            <div class="sig-kpi win"><span class="sig-kpi-num" id="sigWinsCount">0</span><span class="sig-kpi-lbl">برد</span></div>
+            <div class="sig-kpi sell"><span class="sig-kpi-num" id="sigLossCount">0</span><span class="sig-kpi-lbl">باخت</span></div>
+            <div class="sig-kpi"><span class="sig-kpi-num" id="sigWinRate">—</span><span class="sig-kpi-lbl">نرخ برد</span></div>
+            <div class="sig-kpi"><span class="sig-kpi-num" id="sigOpenCount">0</span><span class="sig-kpi-lbl">باز</span></div>
+          </section>
+
+          <section class="grid-2 signals-charts">
+            <article class="panel">
+              <h3 class="panel-heading">روند روزانه + ارسال</h3>
+              <div class="chart-box tall signal-chart-box"><canvas id="signalDailyChart"></canvas><p class="chart-empty-hint" id="signalDailyEmpty">در حال دریافت داده...</p></div>
+            </article>
+            <article class="panel">
+              <h3 class="panel-heading">BUY vs SELL</h3>
+              <div class="chart-box tall signal-chart-box"><canvas id="signalDirChart"></canvas><p class="chart-empty-hint" id="signalDirEmpty">در حال دریافت داده...</p></div>
+            </article>
+          </section>
+
+          <article class="panel panel-flush">
+            <div class="panel-top signals-feed-header">
+              <h3 class="panel-heading">لیست سیگنال‌ها</h3>
+              <span class="hint" id="sigFeedCount">—</span>
+            </div>
+            <div class="signals-feed" id="signalFeed"></div>
+            <nav class="signals-pagination" id="signalPagination" aria-label="صفحه‌بندی سیگنال‌ها"></nav>
+          </article>
+        </div>
+
+        <!-- PAGE: Signal Simulation -->
+        <div class="page" id="page-simulation">
+          <section class="simulation-hero">
+            <div class="hero-bg"></div>
+            <div class="simulation-hero-copy">
+              <div class="hero-status-row">
+                <span class="status-pill"><span class="status-indicator running"></span><span>Replay روی قیمت واقعی</span></span>
+                <span class="hero-time" id="simUpdated">—</span>
+              </div>
+              <h2 class="hero-title">آزمایشگاه عملکرد سیگنال</h2>
+              <p class="hero-sub">اگر تمام سیگنال‌های ربات اجرا می‌شدند، نتیجه فرضی آن‌ها چه بود؟</p>
+            </div>
+            <div class="simulation-score" id="simScoreCard">
+              <span class="simulation-score-label">بازده تجمعی</span>
+              <strong id="simTotalR">0R</strong>
+              <span id="simVerdict">داده کافی نیست</span>
+            </div>
+          </section>
+
+          <div class="simulation-kpis">
+            <article class="sim-kpi"><span>نرخ برد</span><strong id="simWinRate">—</strong><small id="simWinLoss">0W / 0L</small></article>
+            <article class="sim-kpi"><span>Profit Factor</span><strong id="simProfitFactor">—</strong><small>سود ناخالص ÷ زیان</small></article>
+            <article class="sim-kpi"><span>میانگین معامله</span><strong id="simAvgR">—</strong><small>برحسب ریسک اولیه</small></article>
+            <article class="sim-kpi"><span>Max Drawdown</span><strong id="simDrawdown">—</strong><small>افت از سقف Equity</small></article>
+          </div>
+
+          <section class="panel simulation-confidence" id="simConfidencePanel">
+            <div class="simulation-confidence-score">
+              <span>امتیاز اعتماد داده</span>
+              <strong id="simConfidenceScore">۰٪</strong>
+              <div class="simulation-confidence-track"><i id="simConfidenceBar"></i></div>
+            </div>
+            <div class="simulation-confidence-facts">
+              <div><span>بازه اطمینان برد ۹۵٪</span><strong id="simWinRateCI">—</strong></div>
+              <div><span>نتایج بدون ابهام</span><strong id="simDeterministic">—</strong></div>
+              <div><span>بیشترین باخت متوالی</span><strong id="simLossStreak">—</strong></div>
+              <div><span>نسخه محاسبه</span><strong id="simAlgorithmVersion">v—</strong></div>
+            </div>
+            <p id="simConfidenceNote">اعتماد آماری با افزایش تعداد معاملات بسته‌شده بیشتر می‌شود.</p>
+          </section>
+
+          <div class="page-toolbar simulation-toolbar">
+            <select id="simDays" class="select-input" aria-label="بازه شبیه‌سازی"><option value="7">۷ روز</option><option value="30" selected>۳۰ روز</option><option value="90">۹۰ روز</option><option value="365">همه سال</option></select>
+            <select id="simSymbol" class="select-input" aria-label="نماد شبیه‌سازی"><option value="all">همه نمادها</option></select>
+            <select id="simStatus" class="select-input" aria-label="نتیجه شبیه‌سازی"><option value="all">همه نتایج</option><option value="win">سودده</option><option value="loss">زیان‌ده</option><option value="open">باز</option><option value="tp1">TP1</option><option value="tp2">TP2</option><option value="sl">SL</option><option value="expired">منقضی</option></select>
+            <button class="btn btn-secondary" id="btnSimRefresh">بروزرسانی نتایج</button>
+          </div>
+
+          <div class="simulation-loading hidden" id="simulationLoading" aria-live="polite" aria-label="در حال بارگذاری داده‌ها">
+            <span class="simulation-loading-spinner"></span>
+            <div class="simulation-loading-copy">
+              <strong>در حال بارگذاری داده‌های شبیه‌ساز</strong>
+              <span>ممکن است اولین بار چند ثانیه طول بکشد. کش و کوئری‌ها بهینه شده‌اند.</span>
+            </div>
+          </div>
+
+          <div class="simulation-grid">
+            <article class="panel simulation-equity-panel">
+              <div class="panel-top"><div><h3 class="panel-heading">منحنی بازده فرضی</h3><p class="panel-desc">تجمع نتیجه معاملات برحسب R</p></div><span class="simulation-live-badge" id="simClosedCount">۰ بسته‌شده</span></div>
+              <div class="simulation-chart"><canvas id="simulationEquityChart"></canvas><div class="chart-empty" id="simulationEquityEmpty">پس از بسته‌شدن معاملات، نمودار ساخته می‌شود.</div></div>
+            </article>
+            <article class="panel">
+              <div class="panel-top"><div><h3 class="panel-heading">عملکرد نمادها</h3><p class="panel-desc">مقایسه بازده و نرخ برد</p></div></div>
+              <div class="simulation-symbols" id="simSymbolCards"></div>
+            </article>
+          </div>
+
+          <article class="panel simulation-method">
+            <div class="simulation-method-icon"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="9"/></svg></div>
+            <div><strong>روش محاسبه محافظه‌کارانه</strong><p id="simMethodText">۵۰٪ حجم در TP1 و ۵۰٪ تا TP2؛ اگر SL و TP در یک کندل لمس شوند، SL اول در نظر گرفته می‌شود.</p></div>
+            <span id="simAmbiguous">۰ مورد مبهم</span>
+          </article>
+
+          <article class="panel panel-flush simulation-table-panel">
+            <div class="panel-top simulation-table-head"><div><h3 class="panel-heading">دفتر معاملات فرضی</h3><p class="panel-desc">تمام سیگنال‌ها و نتیجه replay آن‌ها</p></div><span class="hint" id="simTradeCount">۰ سیگنال</span></div>
+            <div class="simulation-table-wrap">
+              <table class="simulation-table">
+                <thead><tr><th>زمان</th><th>نماد</th><th>جهت</th><th>Entry</th><th>SL</th><th>TP1 / TP2</th><th>نتیجه</th><th>R</th><th>MFE / MAE</th></tr></thead>
+                <tbody id="simTradeBody"></tbody>
+              </table>
+            </div>
+            <div class="simulation-pagination" id="simPagination" aria-label="صفحه‌بندی دفتر معاملات">
+              <button class="btn btn-ghost btn-compact" id="btnSimPrev" type="button">صفحه قبل</button>
+              <span id="simPageInfo">صفحه ۱ از ۱</span>
+              <button class="btn btn-secondary btn-compact" id="btnSimNext" type="button">صفحه بعد</button>
+            </div>
+            <div class="simulation-export-bar">
+              <div class="simulation-export-select">
+                <label for="simExportWindow" class="toolbar-label">خروجی Excel:</label>
+                <select id="simExportWindow" class="select-input">
+                  <option value="hour">ساعتی اخیر</option>
+                  <option value="today">امروز</option>
+                  <option value="7d">۷ روز اخیر</option>
+                  <option value="30d" selected>۳۰ روز اخیر</option>
+                </select>
+              </div>
+              <div class="simulation-export-select">
+                <label for="simExportSubset" class="toolbar-label">نوع خروجی:</label>
+                <select id="simExportSubset" class="select-input">
+                  <option value="all" selected>همه معاملات</option>
+                  <option value="closed">فقط معاملات بسته‌شده</option>
+                  <option value="open">فقط معاملات باز</option>
+                </select>
+              </div>
+              <button class="btn btn-export excel" id="btnExportSimXlsx" type="button">دانلود اکسل</button>
+            </div>
+          </article>
+        </div>
+
+        <!-- PAGE: Reports -->
+        <div class="page" id="page-reports">
+          <div class="page-toolbar">
+            <label class="toolbar-label">بازه:</label>
+            <select id="reportDays" class="select-input">
+              <option value="7">۷ روز</option><option value="30" selected>۳۰ روز</option><option value="90">۹۰ روز</option><option value="365">۱ سال</option>
+            </select>
+            <button class="btn btn-export excel" id="btnExportExcel">Excel</button>
+            <button class="btn btn-export csv" id="btnExportCsv">CSV</button>
+          </div>
+          <div class="report-kpi">
+            <div class="report-stat"><span class="report-num" id="rptAvg">—</span><span class="report-lbl">میانگین روزانه</span></div>
+            <div class="report-stat"><span class="report-num" id="rptTop">—</span><span class="report-lbl">پرسیگنال‌ترین</span></div>
+            <div class="report-stat"><span class="report-num" id="rptRatio">—</span><span class="report-lbl">BUY/SELL</span></div>
+            <div class="report-stat"><span class="report-num" id="rptRestarts">—</span><span class="report-lbl">Restarts</span></div>
+            <div class="report-stat tg"><span class="report-num" id="rptTgSent">—</span><span class="report-lbl">تلگرام موفق</span></div>
+            <div class="report-stat tg fail"><span class="report-num" id="rptTgRate">—</span><span class="report-lbl">نرخ موفقیت</span></div>
+          </div>
+          <div class="grid-2">
+            <div class="panel"><h3 class="panel-heading">روند روزانه سیگنال‌ها</h3><div class="chart-box tall"><canvas id="dailyChart"></canvas></div></div>
+            <div class="panel"><h3 class="panel-heading">BUY vs SELL</h3><div class="chart-box tall"><canvas id="directionChart"></canvas></div></div>
+          </div>
+          <div class="grid-2">
+            <div class="panel"><h3 class="panel-heading">عملکرد نمادها</h3><div class="chart-box wide"><canvas id="symbolBarChart"></canvas></div></div>
+            <div class="panel"><h3 class="panel-heading">ارسال‌های تلگرام (روزانه)</h3><div class="chart-box wide"><canvas id="telegramReportChart"></canvas></div></div>
+          </div>
+          <div class="grid-2">
+            <article class="panel">
+              <h3 class="panel-heading">Heatmap ساعتی سیگنال‌ها</h3>
+              <div class="chart-box wide"><canvas id="hourlyHeatmapChart"></canvas></div>
+            </article>
+            <article class="panel panel-flush">
+              <div class="panel-top">
+                <h3 class="panel-heading">گزارش تفصیلی نمادها</h3>
+                <span class="hint" id="symbolReportMeta">—</span>
+              </div>
+              <div class="symbol-report-table-wrap">
+                <table class="symbol-report-table" id="symbolReportTable">
+                  <thead>
+                    <tr>
+                      <th>نماد</th>
+                      <th>کل</th>
+                      <th>BUY</th>
+                      <th>SELL</th>
+                      <th>برد</th>
+                      <th>باخت</th>
+                      <th>نرخ برد</th>
+                      <th>تلگرام</th>
+                    </tr>
+                  </thead>
+                  <tbody id="symbolReportBody"></tbody>
+                </table>
+              </div>
+            </article>
+          </div>
+          <p class="hint" id="reportGenerated">—</p>
+        </div>
+
+        <!-- PAGE: Telegram -->
+        <div class="page" id="page-telegram">
+          <section class="telegram-hero">
+            <div class="hero-bg"></div>
+            <div class="telegram-hero-body">
+              <div>
+                <div class="hero-status-row">
+                  <span class="status-pill" id="tgStatusPill"><span class="status-indicator running" id="tgStatusDot"></span><span id="tgStatusLabel">—</span></span>
+                  <span class="hero-time" id="tgUpdated">—</span>
+                </div>
+                <h2 class="hero-title">لاگ ارسال تلگرام</h2>
+                <p class="hero-sub" id="tgSub">تاریخچه کامل سیگنال‌های ارسال‌شده و خطاهای تلگرام</p>
+              </div>
+              <div class="telegram-hero-stats">
+                <div class="tg-stat ok"><span class="tg-stat-num" id="tgOkTotal">0</span><span class="tg-stat-lbl">موفق</span></div>
+                <div class="tg-stat fail"><span class="tg-stat-num" id="tgFailTotal">0</span><span class="tg-stat-lbl">ناموفق</span></div>
+                <div class="tg-stat"><span class="tg-stat-num" id="tgRateTotal">0%</span><span class="tg-stat-lbl">نرخ موفقیت</span></div>
+              </div>
+            </div>
+          </section>
+
+          <div class="page-toolbar">
+            <input type="search" id="telegramSearch" class="search-input" placeholder="جستجو نماد..." />
+            <select id="telegramStatus" class="select-input">
+              <option value="all">همه</option>
+              <option value="ok">موفق</option>
+              <option value="failed">ناموفق</option>
+            </select>
+            <select id="telegramDays" class="select-input">
+              <option value="7">۷ روز</option>
+              <option value="30" selected>۳۰ روز</option>
+              <option value="90">۹۰ روز</option>
+            </select>
+            <button class="btn btn-primary" id="btnTelegramTest">📨 تست ارسال</button>
+            <button class="btn btn-export csv" id="btnExportTelegram">CSV</button>
+          </div>
+
+          <div class="telegram-kpi">
+            <div class="report-stat"><span class="report-num" id="tgTodayOk">0</span><span class="report-lbl">موفق امروز</span></div>
+            <div class="report-stat"><span class="report-num" id="tgTodayFail">0</span><span class="report-lbl">خطا امروز</span></div>
+            <div class="report-stat"><span class="report-num" id="tgTopSymbol">—</span><span class="report-lbl">پرنمادترین</span></div>
+          </div>
+
+          <div class="panel panel-flush">
+            <div class="telegram-feed" id="telegramFeed"></div>
+          </div>
+          <nav class="signals-pagination telegram-pagination" id="telegramPagination" aria-label="صفحه‌بندی تلگرام"></nav>
+        </div>
+
+        <!-- PAGE: Facebook -->
+        <div class="page" id="page-facebook">
+          <section class="facebook-hero">
+            <div class="hero-bg"></div>
+            <div class="facebook-hero-body">
+              <div>
+                <div class="hero-status-row">
+                  <span class="status-pill"><span class="status-indicator" id="fbStatusDot"></span><span id="fbStatusLabel">در حال بررسی</span></span>
+                  <span class="hero-time" id="fbSessionMeta">سشن: —</span>
+                </div>
+                <h2 class="hero-title">مرکز ارسال فیسبوک</h2>
+                <p class="hero-sub">مدیریت گروه‌ها، بازبینی پیام‌ها و کنترل انتشار سیگنال</p>
+              </div>
+              <div class="facebook-mode-card">
+                <div>
+                  <span class="facebook-mode-label">حالت انتشار</span>
+                  <strong id="fbModeText">تأیید دستی</strong>
+                </div>
+                <label class="switch" aria-label="ارسال خودکار فیسبوک">
+                  <input type="checkbox" id="fbAutoPost" />
+                  <span class="switch-track"></span>
+                </label>
+              </div>
+            </div>
+          </section>
+
+          <section class="facebook-readiness" aria-label="وضعیت آماده‌سازی فیسبوک">
+            <article class="fb-ready-card" id="fbReadyChrome"><span class="fb-ready-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l7 4"/></svg></span><div><strong>مرورگر سرور</strong><span>در حال بررسی</span></div></article>
+            <article class="fb-ready-card" id="fbReadySession"><span class="fb-ready-icon"><svg viewBox="0 0 24 24"><path d="M20 21a8 8 0 00-16 0"/><circle cx="12" cy="7" r="4"/></svg></span><div><strong>سشن فیسبوک</strong><span>تنظیم نشده</span></div></article>
+            <article class="fb-ready-card" id="fbReadyGroups"><span class="fb-ready-icon"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2"/><path d="M3 20a6 6 0 0112 0M14 20a4 4 0 018 0"/></svg></span><div><strong>گروه‌های فعال</strong><span>۰ گروه</span></div></article>
+            <article class="fb-ready-card" id="fbReadyPoster"><span class="fb-ready-icon"><svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg></span><div><strong>آمادگی ارسال</strong><span>ناقص</span></div></article>
+          </section>
+
+          <div class="facebook-layout">
+            <section class="panel facebook-groups-panel">
+              <div class="panel-top facebook-panel-head">
+                <div><h3 class="panel-heading">گروه‌های مقصد</h3><p class="panel-desc">هر گروه می‌تواند زبان و قالب پیام مستقل داشته باشد</p></div>
+                <button class="btn btn-primary btn-compact" id="btnFbAddGroup"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> افزودن گروه</button>
+              </div>
+              <div class="facebook-group-tools">
+                <input type="search" class="search-input" id="fbGroupSearch" placeholder="جستجوی نام یا لینک گروه..." />
+                <button class="btn btn-secondary btn-compact" id="btnFbEnableAll">فعال‌سازی همه</button>
+                <button class="btn btn-ghost btn-compact" id="btnFbDisableAll">توقف همه</button>
+              </div>
+              <div class="facebook-groups-list" id="fbGroupsList"></div>
+              <div class="facebook-pagination hidden" id="fbGroupsPagination">
+                <button class="btn btn-ghost btn-compact" id="btnFbGroupsPrev" type="button">قبلی</button>
+                <span id="fbGroupsPageInfo">صفحه ۱ از ۱</span>
+                <button class="btn btn-ghost btn-compact" id="btnFbGroupsNext" type="button">بعدی</button>
+              </div>
+            </section>
+
+            <aside class="panel facebook-session-panel">
+              <div class="fb-session-mark" id="fbSessionMark"><svg viewBox="0 0 24 24"><path d="M6 10V8a6 6 0 0112 0v2"/><rect x="4" y="10" width="16" height="11" rx="2"/><circle cx="12" cy="15" r="1"/></svg></div>
+              <h3 class="panel-heading">اتصال حساب</h3>
+              <p class="panel-desc">فایل JSON کوکی‌های Facebook را برای ورود امن مرورگر سرور بارگذاری کنید.</p>
+              <div class="facebook-session-state" id="fbSessionState" role="status" aria-live="polite">
+                <span class="facebook-session-state-dot"></span>
+                <div><strong id="fbSessionStateTitle">در حال بررسی</strong><span id="fbSessionStateDetail">وضعیت اتصال از سرور دریافت می‌شود</span></div>
+              </div>
+              <input type="file" id="fbSessionFile" accept=".json,application/json" hidden />
+              <button class="btn btn-secondary facebook-upload-btn" id="btnFbSessionUpload" type="button"><span class="fb-button-label">انتخاب فایل سشن</span></button>
+              <button class="btn btn-ghost facebook-test-session-btn" id="btnFbTestSession" type="button"><span class="fb-button-label">تست اتصال حساب</span></button>
+              <p class="facebook-security-note">فایل با سطح دسترسی محدود روی سرور نگهداری می‌شود.</p>
+            </aside>
+          </div>
+
+          <section class="panel facebook-queue-panel">
+            <div class="panel-top facebook-panel-head">
+              <div><h3 class="panel-heading">صف پیام‌ها و تأیید انتشار</h3><p class="panel-desc">پیام را قبل از ارسال ببینید و سپس تأیید کنید</p></div>
+              <button class="link-btn" id="btnFbRefresh">بروزرسانی</button>
+            </div>
+            <div class="facebook-jobs" id="fbJobsList"></div>
+            <div class="facebook-pagination hidden" id="fbJobsPagination">
+              <button class="btn btn-ghost btn-compact" id="btnFbJobsPrev" type="button">قبلی</button>
+              <span id="fbJobsPageInfo">صفحه ۱ از ۱</span>
+              <button class="btn btn-ghost btn-compact" id="btnFbJobsNext" type="button">بعدی</button>
+            </div>
+          </section>
+
+          <section class="panel facebook-history-panel">
+            <div class="panel-top facebook-panel-head">
+              <div>
+                <h3 class="panel-heading">پیام‌های ارسال‌شده</h3>
+                <p class="panel-desc">تاریخچه انتشار موفق به گروه‌های فیسبوک</p>
+              </div>
+              <span class="facebook-history-count" id="fbHistoryCount">۰ مورد</span>
+            </div>
+            <div class="facebook-history-list" id="fbHistoryList"></div>
+            <div class="facebook-pagination hidden" id="fbHistoryPagination">
+              <button class="btn btn-ghost btn-compact" id="btnFbHistoryPrev" type="button">قبلی</button>
+              <span id="fbHistoryPageInfo">صفحه ۱ از ۱</span>
+              <button class="btn btn-ghost btn-compact" id="btnFbHistoryNext" type="button">بعدی</button>
+            </div>
+          </section>
+
+          <details class="panel facebook-log-panel">
+            <summary><span>لاگ و عیب‌یابی ارسال</span><button type="button" class="link-btn" id="btnFbLogs">دریافت لاگ</button></summary>
+            <div class="facebook-log-view" id="fbLogView">برای مشاهده جزئیات، دریافت لاگ را بزنید.</div>
+          </details>
+        </div>
+
+        <!-- PAGE: Settings -->
+        <div class="page" id="page-settings">
+
+          <section class="settings-hero">
+            <div class="hero-bg"></div>
+            <div class="settings-hero-body">
+              <div>
+                <div class="hero-status-row">
+                  <span class="status-pill"><span class="status-indicator running" id="settingsStatusDot"></span><span id="settingsStatusLabel">پیکربندی ربات</span></span>
+                  <span class="hero-time" id="settingsUpdated">—</span>
+                </div>
+                <h2 class="hero-title">تنظیمات و سازماندهی</h2>
+                <p class="hero-sub">مدیریت نمادها، موتور تحلیل و کانال‌های ارسال</p>
+              </div>
+              <div class="settings-hero-stats">
+                <div class="set-stat"><span class="set-stat-num" id="settingsSymCount">0</span><span class="set-stat-lbl">نماد فعال</span></div>
+                <div class="set-stat"><span class="set-stat-num" id="settingsMinScore">5</span><span class="set-stat-lbl">حداقل امتیاز</span></div>
+                <div class="set-stat"><span class="set-stat-num" id="settingsPollVal">30s</span><span class="set-stat-lbl">فاصله بررسی</span></div>
+              </div>
+            </div>
+          </section>
+
+          <article class="panel settings-symbols-panel">
+            <div class="panel-top settings-symbols-top">
+              <div>
+                <h3 class="panel-heading">نمادهای تحلیل</h3>
+                <p class="panel-desc">انتخاب نمادهایی که ربات روی آن‌ها سیگنال تولید می‌کند</p>
+              </div>
+              <button type="button" class="btn btn-primary btn-compact" id="btnSettingsSymbols">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                انتخاب و مدیریت نمادها
+              </button>
+            </div>
+            <div class="settings-symbols-preview" id="settingsSymbolsCard"></div>
+            <p class="sym-hint settings-symbols-hint">برای افزودن، حذف یا فعال/غیرفعال کردن نمادها، دکمه بالا را بزنید</p>
+          </article>
+
+          <div class="settings-grid">
+            <article class="panel settings-section">
+              <h3 class="panel-heading">موتور تحلیل</h3>
+              <p class="panel-desc">تنظیمات امتیازدهی و سرعت بررسی بازار</p>
+              <div class="settings-fields">
+                <div class="settings-field">
+                  <div class="settings-field-head">
+                    <label for="cfgMinScoreRange">حداقل امتیاز سیگنال</label>
+                    <span class="settings-field-val" id="settingsScoreDisplay">5</span>
+                  </div>
+                  <input type="range" id="cfgMinScoreRange" min="1" max="20" value="5" class="settings-range" />
+                  <input type="number" id="cfgMinScore" min="1" max="20" hidden />
+                </div>
+                <div class="settings-field">
+                  <div class="settings-field-head">
+                    <label for="cfgPollRange">فاصله بررسی (ثانیه)</label>
+                    <span class="settings-field-val" id="settingsPollDisplay">30s</span>
+                  </div>
+                  <input type="range" id="cfgPollRange" min="10" max="300" step="10" value="30" class="settings-range" />
+                  <input type="number" id="cfgPoll" min="10" max="300" hidden />
+                </div>
+                <div class="settings-field">
+                  <label>Provider داده</label>
+                  <span class="settings-readonly" id="settingsProvider">—</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="panel settings-section">
+              <h3 class="panel-heading">کانال‌های ارسال</h3>
+              <p class="panel-desc">فعال‌سازی پلتفرم‌های خروجی سیگنال</p>
+              <div class="settings-toggles">
+                <div class="settings-toggle-row">
+                  <div class="settings-toggle-info">
+                    <span class="settings-toggle-label">Facebook</span>
+                    <span class="settings-toggle-desc">ارسال سیگنال به Facebook</span>
+                  </div>
+                  <label class="toggle"><input type="checkbox" id="cfgFacebook" /><span class="toggle-slider"></span></label>
+                </div>
+                <div class="settings-toggle-row readonly">
+                  <div class="settings-toggle-info">
+                    <span class="settings-toggle-label">Telegram</span>
+                    <span class="settings-toggle-desc" id="settingsTelegramDesc">—</span>
+                  </div>
+                  <span class="settings-status-badge" id="settingsTelegramBadge">—</span>
+                </div>
+                <div class="settings-toggle-row readonly">
+                  <div class="settings-toggle-info">
+                    <span class="settings-toggle-label">نوتیفیکیشن</span>
+                    <span class="settings-toggle-desc">وضعیت ارسال خودکار</span>
+                  </div>
+                  <span class="settings-status-badge" id="settingsNotifBadge">—</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="panel settings-section">
+              <h3 class="panel-heading">توسعه و دیباگ</h3>
+              <p class="panel-desc">ابزارهای عیب‌یابی موتور</p>
+              <div class="settings-toggles">
+                <div class="settings-toggle-row">
+                  <div class="settings-toggle-info">
+                    <span class="settings-toggle-label">Debug Engine</span>
+                    <span class="settings-toggle-desc">لاگ‌های verbose موتور</span>
+                  </div>
+                  <label class="toggle"><input type="checkbox" id="cfgDebug" /><span class="toggle-slider"></span></label>
+                </div>
+              </div>
+              <p class="hint settings-debug-hint">وضعیت: <strong id="debugStatus">خاموش</strong></p>
+            </article>
+
+            <article class="panel settings-section settings-info-panel">
+              <h3 class="panel-heading">راهنمای اعمال</h3>
+              <ul class="settings-tips">
+                <li>تغییر <strong>نمادها</strong> از ماژول — تیک = ردیابی فعال</li>
+                <li>پس از ذخیره، <strong>ری‌استارت ربات</strong> برای اعمال کامل</li>
+                <li>حداقل امتیاز بالاتر = سیگنال‌های کمتر ولی دقیق‌تر</li>
+              </ul>
+            </article>
+          </div>
+
+          <article class="panel settings-strategy-panel">
+            <div class="panel-top">
+              <div>
+                <h3 class="panel-heading">استراتژی تحلیل (MT5)</h3>
+                <p class="panel-desc">آپلود .mq5، مقایسه نسخه‌ها، Win Rate و سیگنال‌های هر نسخه فعال‌شده</p>
+              </div>
+              <button type="button" class="btn btn-sm btn-ghost" id="btnStrategyRefresh">↻ بروزرسانی</button>
+            </div>
+
+            <div class="strategy-current" id="strategyCurrent">
+              <p class="panel-empty">در حال بارگذاری…</p>
+            </div>
+
+            <div class="strategy-perf-summary hidden" id="strategyPerfSummary">
+              <div class="strategy-perf-summary-head">
+                <h4 class="strategy-history-title">مقایسه نسخه‌ها</h4>
+                <span class="hint" id="strategyPerfMeta">—</span>
+              </div>
+              <div class="strategy-compare-grid" id="strategyCompareGrid"></div>
+            </div>
+
+            <div class="strategy-detail hidden" id="strategyDetail">
+              <div class="strategy-detail-head">
+                <div>
+                  <h4 class="strategy-detail-title" id="strategyDetailTitle">جزئیات نسخه</h4>
+                  <p class="strategy-detail-sub" id="strategyDetailSub">—</p>
+                </div>
+                <button type="button" class="btn btn-sm btn-ghost" id="btnStrategyDetailClose">✕</button>
+              </div>
+              <div class="strategy-detail-kpis" id="strategyDetailKpis"></div>
+              <div class="strategy-detail-periods" id="strategyDetailPeriods"></div>
+              <div class="strategy-detail-signals">
+                <h5 class="strategy-detail-section-title">سیگنال‌های این نسخه</h5>
+                <div class="strategy-signal-list" id="strategyDetailSignals"></div>
+              </div>
+            </div>
+
+            <div class="strategy-dropzone" id="strategyDropZone">
+              <input type="file" id="strategyFileInput" accept=".mq5,text/plain" hidden />
+              <div class="strategy-drop-inner">
+                <div class="strategy-drop-icon">📄</div>
+                <p class="strategy-drop-title">فایل .mq5 را اینجا رها کنید</p>
+                <p class="strategy-drop-sub">یا <button type="button" class="link-btn" id="btnStrategyBrowse">انتخاب فایل</button> از سیستم</p>
+                <p class="sym-hint">حداکثر ۲ مگابایت — مثال: SignalBot_MultiIndicator_MT5_v6.mq5</p>
+              </div>
+              <div class="strategy-file-picked hidden" id="strategyFilePicked">
+                <span class="strategy-picked-name" id="strategyPickedName">—</span>
+                <button type="button" class="btn btn-sm btn-ghost" id="btnStrategyClear">✕</button>
+              </div>
+            </div>
+
+            <div class="strategy-actions">
+              <button type="button" class="btn btn-primary" id="btnStrategyUpload" disabled>آپلود استراتژی</button>
+              <button type="button" class="btn btn-success" id="btnStrategyApply" disabled>فعال‌سازی روی ربات</button>
+              <button type="button" class="btn btn-ghost" id="btnStrategyDownload">دانلود نسخه فعال</button>
+            </div>
+            <p class="hint strategy-apply-hint">فعال‌سازی: فایل به <code>strategy/active.mq5</code> کپی می‌شود، MIN_SCORE همگام می‌شود. اگر نوتیفیکیشن pause باشد موتور ری‌استارت نمی‌شود.</p>
+
+            <div class="strategy-history-wrap">
+              <h4 class="strategy-history-title">نسخه‌های سرور — آپلود و فعال‌سازی</h4>
+              <p class="hint strategy-history-hint">روی هر نسخه کلیک کنید تا Win Rate، سیگنال‌ها و دوره‌های فعال بودن را ببینید.</p>
+              <div class="strategy-history" id="strategyHistory">
+                <p class="panel-empty">هنوز فایلی آپلود نشده</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel settings-ops-panel">
+            <div class="panel-top">
+              <div>
+                <h3 class="panel-heading">عملیات و هشدارها</h3>
+                <p class="panel-desc">آستانه‌ها، وب‌هوک، نگهداری زمان‌بندی‌شده و پشتیبان‌گیری</p>
+              </div>
+              <button type="button" class="btn btn-sm btn-ghost" id="btnWhatsNew">✨ چه چیز جدید است؟</button>
+            </div>
+            <div class="settings-ops-grid">
+              <div class="settings-ops-block">
+                <h4>آستانه هشدار</h4>
+                <div class="ops-field-row">
+                  <label>CPU %</label>
+                  <input type="number" id="opsAlertCpu" min="50" max="100" class="ops-input" />
+                </div>
+                <div class="ops-field-row">
+                  <label>RAM %</label>
+                  <input type="number" id="opsAlertRam" min="50" max="100" class="ops-input" />
+                </div>
+                <div class="ops-field-row">
+                  <label>Disk %</label>
+                  <input type="number" id="opsAlertDisk" min="50" max="100" class="ops-input" />
+                </div>
+                <p class="hint">هشدارهای CPU/RAM/Disk فقط در داشبورد نمایش داده می‌شوند. تلگرام فقط برای سیگنال‌های معاملاتی است.</p>
+                <label class="ops-check"><input type="checkbox" id="opsBrowserNotif" /> نوتیفیکیشن مرورگر</label>
+              </div>
+              <div class="settings-ops-block">
+                <h4>Webhooks</h4>
+                <div class="ops-field-row">
+                  <label>Discord URL</label>
+                  <input type="url" id="opsWebhookDiscord" class="ops-input wide" placeholder="https://discord.com/api/webhooks/..." />
+                </div>
+                <div class="ops-field-row">
+                  <label>Slack URL</label>
+                  <input type="url" id="opsWebhookSlack" class="ops-input wide" placeholder="https://hooks.slack.com/..." />
+                </div>
+                <label class="ops-check"><input type="checkbox" id="opsWebhookOnSignal" /> ارسال روی سیگنال جدید</label>
+              </div>
+              <div class="settings-ops-block">
+                <h4>نگهداری زمان‌بندی‌شده</h4>
+                <label class="ops-check"><input type="checkbox" id="opsMaintenanceEnabled" /> فعال</label>
+                <div class="ops-field-row">
+                  <label>بازه (24h)</label>
+                  <input type="text" id="opsMaintenanceWindow" class="ops-input" placeholder="22:00-06:00" />
+                </div>
+                <p class="sym-hint">در این بازه، ارسال خودکار متوقف می‌شود</p>
+              </div>
+              <div class="settings-ops-block">
+                <h4>پشتیبان‌گیری</h4>
+                <div class="ops-btn-row">
+                  <button type="button" class="btn btn-primary btn-compact" id="btnConfigBackup">دانلود پشتیبان</button>
+                  <label class="btn btn-ghost btn-compact ops-file-btn">
+                    بازیابی JSON
+                    <input type="file" id="configRestoreFile" accept="application/json,.json" hidden />
+                  </label>
+                </div>
+                <p class="sym-hint">Telegram webhook: <code>/api/telegram/webhook</code> — دستورات: /status /pause /symbols /resume</p>
+              </div>
+            </div>
+            <div class="settings-ops-actions">
+              <button type="button" class="btn btn-primary" id="btnSaveOps">ذخیره تنظیمات عملیات</button>
+            </div>
+          </article>
+
+          <article class="panel settings-audit-panel">
+            <div class="panel-top">
+              <h3 class="panel-heading">گزارش ممیزی (Audit)</h3>
+              <button type="button" class="link-btn" id="btnRefreshAudit">بروزرسانی</button>
+            </div>
+            <div class="audit-log" id="auditLog"></div>
+          </article>
+
+          <div class="settings-save-bar">
+            <p class="hint">تغییرات تا زمان ذخیره اعمال نمی‌شوند</p>
+            <button type="button" class="btn btn-primary btn-save-settings" id="btnSaveConfig">ذخیره تنظیمات</button>
+          </div>
+
+          <input type="hidden" id="cfgSymbols" />
+        </div>
+
+        <!-- PAGE: Logs -->
+        <div class="page" id="page-logs">
+          <div class="page-toolbar">
+            <select id="logSelect" class="select-input">
+              <option value="signal-engine">Signal Engine</option>
+              <option value="signal-server-out">Signal Server (out)</option>
+              <option value="signal-server-err">Signal Server (err)</option>
+              <option value="facebook">Facebook Log</option>
+            </select>
+          </div>
+          <div class="terminal">
+            <div class="terminal-header"><span class="term-dot red"></span><span class="term-dot yellow"></span><span class="term-dot green"></span><span class="term-title">live logs</span></div>
+            <pre class="terminal-body" id="terminalBody"></pre>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Symbol Manager Modal -->
+  <div class="modal-overlay" id="symbolsModalOverlay" aria-hidden="true">
+    <div class="modal-sheet symbols-modal" id="symbolsModal" role="dialog" aria-labelledby="symbolsModalTitle" aria-modal="true">
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title" id="symbolsModalTitle">مدیریت نمادها</h2>
+          <p class="modal-sub">تیک بزنید تا ربات نماد را ردیابی کند — افزودن، حذف و ویرایش</p>
+        </div>
+        <button type="button" class="modal-close" id="symbolsModalClose" aria-label="بستن">✕</button>
+      </div>
+
+      <div class="modal-body symbols-modal-body">
+        <section class="sym-section sym-section-track">
+          <div class="sym-section-head">
+            <div>
+              <h3>انتخاب نمادها برای ردیابی</h3>
+              <p class="sym-hint-inline">تیک = ربات این نماد را تحلیل می‌کند</p>
+            </div>
+            <div class="sym-bulk-actions">
+              <button type="button" class="sym-bulk-btn" id="symbolsSelectAll">همه ✓</button>
+              <button type="button" class="sym-bulk-btn" id="symbolsSelectNone">هیچ</button>
+              <span class="sym-count" id="symbolsActiveCount">0</span>
+            </div>
+          </div>
+          <div class="symbols-track-list" id="symbolsActiveList"></div>
+          <p class="sym-empty" id="symbolsEmptyHint" hidden>هنوز نمادی اضافه نشده — از پیشنهادها یا فیلد زیر استفاده کنید.</p>
+        </section>
+
+        <section class="sym-section">
+          <h3>افزودن نماد</h3>
+          <div class="sym-add-row">
+            <input type="text" id="symbolAddInput" class="sym-input" placeholder="مثال: EUR/USD یا XAUUSD" autocomplete="off" inputmode="text" />
+            <button type="button" class="btn btn-primary sym-add-btn" id="symbolAddBtn">افزودن</button>
+          </div>
+          <p class="sym-hint">فرمت: EUR/USD، GBPUSD یا XAU/USD — حداکثر ۱۲ نماد</p>
+        </section>
+
+        <section class="sym-section">
+          <h3>پیشنهاد سریع</h3>
+          <div class="sym-presets" id="symbolsPresets"></div>
+        </section>
+
+        <section class="sym-section">
+          <div class="sym-section-head">
+            <h3>وضعیت موتور</h3>
+            <span class="sym-hint-inline">آخرین فعالیت هر نماد</span>
+          </div>
+          <div class="sym-engine-list" id="symbolsEngineList"></div>
+        </section>
+      </div>
+
+      <div class="modal-footer symbols-modal-footer">
+        <button type="button" class="btn btn-ghost" id="symbolsModalCancel">انصراف</button>
+        <button type="button" class="btn btn-primary" id="symbolsModalSave">ذخیره و اعمال</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="fbGroupModal" aria-hidden="true">
+    <div class="modal-sheet facebook-modal" role="dialog" aria-modal="true" aria-labelledby="fbGroupModalTitle">
+      <div class="modal-header"><div><h2 class="modal-title" id="fbGroupModalTitle">افزودن گروه فیسبوک</h2><p class="modal-sub">مشخصات مقصد و قالب ارسال را تنظیم کنید</p></div><button type="button" class="modal-close" data-fb-close aria-label="بستن">×</button></div>
+      <form class="modal-body facebook-group-form" id="fbGroupForm">
+        <input type="hidden" id="fbGroupId" />
+        <label>نام گروه (اختیاری — برای افزودن چند گروه با هم، خالی بگذارید)<input class="text-input" id="fbGroupName" autocomplete="off" /></label>
+        <label>لینک گروه (هر لینک در یک خط، یا با کاما جدا کنید)<textarea class="text-input" id="fbGroupUrl" required rows="4" placeholder="https://www.facebook.com/groups/...&#10;https://www.facebook.com/groups/..."></textarea></label>
+        <div class="facebook-form-grid">
+          <label>زبان<select class="select-input" id="fbGroupLanguage"><option value="English">English</option><option value="Persian">فارسی</option><option value="Russian">Русский</option></select></label>
+          <label>قالب پیام<select class="select-input" id="fbGroupTemplate"><option value="1">قالب ۱</option><option value="2">قالب ۲</option><option value="3">قالب ۳</option></select></label>
+        </div>
+        <p class="form-error" id="fbGroupError" role="alert"></p>
+        <button class="btn btn-primary facebook-submit" type="submit">ذخیره گروه</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="fbPreviewModal" aria-hidden="true">
+    <div class="modal-sheet facebook-modal facebook-preview-modal" role="dialog" aria-modal="true" aria-labelledby="fbPreviewTitle">
+      <div class="modal-header"><div><h2 class="modal-title" id="fbPreviewTitle">پیش‌نمایش پیام</h2><p class="modal-sub" id="fbPreviewSignal">—</p></div><button type="button" class="modal-close" data-fb-preview-close aria-label="بستن">×</button></div>
+      <div class="modal-body">
+        <div class="facebook-preview-tabs" id="fbPreviewTabs"></div>
+        <img id="fbChartPreview" class="facebook-chart-preview hidden" alt="نمودار سیگنال" />
+        <pre class="facebook-message-preview" id="fbMessagePreview"></pre>
+        <div class="facebook-publish-progress hidden" id="fbPublishProgress" role="status" aria-live="polite">
+          <div class="facebook-publish-progress-head">
+            <span class="facebook-publish-state-icon" id="fbPublishStateIcon" data-state="queued">
+              <span class="facebook-publish-spinner" id="fbPublishSpinner"></span>
+              <svg class="facebook-publish-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+              <svg class="facebook-publish-error" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </span>
+            <div class="facebook-publish-head-text">
+              <strong id="fbPublishTitle">در حال ارسال</strong>
+              <span id="fbPublishMessage">مرورگر سرور در حال آماده‌سازی است</span>
+            </div>
+          </div>
+          <div class="facebook-publish-bar-wrap" aria-hidden="true">
+            <div class="facebook-publish-bar" id="fbPublishBar"></div>
+          </div>
+          <div class="facebook-publish-stats">
+            <span>گروه <strong id="fbPublishGroup">—</strong></span>
+            <span>پیشرفت <strong id="fbPublishCount">۰ از ۰</strong></span>
+            <span>موفق <strong class="positive" id="fbPublishSuccess">۰</strong></span>
+            <span>ناموفق <strong class="negative" id="fbPublishFailed">۰</strong></span>
+          </div>
+          <a class="facebook-publish-url" id="fbPublishUrl" href="#" target="_blank" rel="noopener" hidden>مشاهده صفحه گروه</a>
+          <p class="facebook-publish-detail" id="fbPublishDetail"></p>
+        </div>
+        <div class="facebook-preview-actions">
+          <button class="btn btn-secondary" id="btnFbDryRun">اجرای آزمایشی</button>
+          <button class="btn btn-primary" id="btnFbApproveSend">تأیید و ارسال به گروه‌های فعال</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Changelog Modal -->
+  <div class="modal-overlay" id="changelogModalOverlay" aria-hidden="true">
+    <div class="modal-sheet changelog-modal" role="dialog" aria-modal="true">
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title">تغییرات نسخه</h2>
+          <p class="modal-sub" id="changelogCurrent">—</p>
+        </div>
+        <button type="button" class="modal-close" id="changelogModalClose" aria-label="بستن">✕</button>
+      </div>
+      <div class="modal-body changelog-body" id="changelogBody"></div>
+    </div>
+  </div>
+
+  <script src="/static/js/dashboard.js?v=2.55.5"></script>
+</body>
+</html>

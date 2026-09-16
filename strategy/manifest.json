@@ -1,0 +1,112 @@
+{
+  "active_id": "20260713-143009",
+  "history": [
+    {
+      "id": "20260713-143009",
+      "original_name": "SignalBot_MultiIndicator_MT5_v6_16.mq5",
+      "stored_name": "20260713-143009_SignalBot_MultiIndicator_MT5_v6_16.mq5",
+      "uploaded_at": "2026-07-13 14:30:09 UTC",
+      "uploaded_by": "admin",
+      "size_bytes": 114666,
+      "checksum_sha256": "fa6867603e31d825d34fed75465de7c109c20491e641eaae3f5e7ea8b3effaf5",
+      "version": "6.16",
+      "title": "SignalBot_MultiIndicator_MT5.mq5  v6.16",
+      "input_count": 132,
+      "inputs_preview": [
+        "InpBotToken",
+        "InpChatID",
+        "InpSendStartupMessage",
+        "InpWeeklyEMA",
+        "InpDailyMA",
+        "InpCrossFastMA",
+        "InpCrossSlowMA",
+        "InpAlertGoldenDeathCross",
+        "InpH1EMA",
+        "InpSwingLookback",
+        "InpFractalWing",
+        "InpRSIPeriod"
+      ],
+      "applied_at": "2026-07-13 14:30:35 UTC"
+    },
+    {
+      "id": "20260710-090702",
+      "original_name": "SignalBot_MultiIndicator_MT5_v6_11.mq5",
+      "stored_name": "20260710-090702_SignalBot_MultiIndicator_MT5_v6_11.mq5",
+      "uploaded_at": "2026-07-10 09:07:02 UTC",
+      "uploaded_by": "admin",
+      "size_bytes": 64702,
+      "checksum_sha256": "f0989319e6a3537823914f8270ede7a53244365a1bbe016fe0ac3c469ab1dafb",
+      "version": "6.11",
+      "title": "SignalBot_MultiIndicator_MT5.mq5  v6.11",
+      "input_count": 91,
+      "inputs_preview": [
+        "InpBotToken",
+        "InpChatID",
+        "InpSendStartupMessage",
+        "InpWeeklyEMA",
+        "InpDailyMA",
+        "InpCrossFastMA",
+        "InpCrossSlowMA",
+        "InpAlertGoldenDeathCross",
+        "InpH1EMA",
+        "InpSwingLookback",
+        "InpFractalWing",
+        "InpRSIPeriod"
+      ],
+      "applied_at": "2026-07-10 09:07:16 UTC"
+    },
+    {
+      "id": "20260710-044834",
+      "original_name": "SignalBot_MultiIndicator_MT5_v6_1.mq5",
+      "stored_name": "20260710-044834_SignalBot_MultiIndicator_MT5_v6_1.mq5",
+      "uploaded_at": "2026-07-10 04:48:34 UTC",
+      "uploaded_by": "admin",
+      "size_bytes": 57851,
+      "checksum_sha256": "5ab1e62231ac7dc6a36e11a002201cb12b53d168950dcf0537c6853dd33a2909",
+      "version": "6.10",
+      "title": "SignalBot_MultiIndicator_MT5.mq5  v6.1",
+      "input_count": 85,
+      "inputs_preview": [
+        "InpBotToken",
+        "InpChatID",
+        "InpSendStartupMessage",
+        "InpWeeklyEMA",
+        "InpDailyMA",
+        "InpCrossFastMA",
+        "InpCrossSlowMA",
+        "InpAlertGoldenDeathCross",
+        "InpH1EMA",
+        "InpSwingLookback",
+        "InpFractalWing",
+        "InpRSIPeriod"
+      ],
+      "applied_at": "2026-07-10 09:04:51 UTC"
+    }
+  ],
+  "activation_log": [
+    {
+      "entry_id": "20260710-044834",
+      "applied_at": "2026-07-10 04:48:45 UTC",
+      "version": "6.10",
+      "original_name": "SignalBot_MultiIndicator_MT5_v6_1.mq5"
+    },
+    {
+      "entry_id": "20260710-044834",
+      "applied_at": "2026-07-10 09:04:51 UTC",
+      "version": "6.10",
+      "original_name": "SignalBot_MultiIndicator_MT5_v6_1.mq5"
+    },
+    {
+      "entry_id": "20260710-090702",
+      "applied_at": "2026-07-10 09:07:16 UTC",
+      "version": "6.11",
+      "original_name": "SignalBot_MultiIndicator_MT5_v6_11.mq5"
+    },
+    {
+      "entry_id": "20260713-143009",
+      "applied_at": "2026-07-13 14:30:35 UTC",
+      "version": "6.16",
+      "original_name": "SignalBot_MultiIndicator_MT5_v6_16.mq5"
+    }
+  ]
+}
